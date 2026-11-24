@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registration Form</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.container {
+    width: 350px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px #0003;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+button {
+    width: 100%;
+    padding: 13px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #5365c5;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#message {
+    text-align: center;
+    margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Registration Form</h2>
+
+    <form id="myForm">
+
+        <input
+            type="text"
+            name="name"
+            placeholder="Enter Your Name"
+            required
+        >
+
+        <input
+            type="email"
+            name="email"
+            placeholder="Enter Your Email"
+            required
+        >
+
+        <input
+            type="tel"
+            name="number"
+            placeholder="Enter Mobile Number"
+            pattern="[0-9]{10}"
+            required
+        >
+
+        <input
+            type="text"
+            name="varchar"
+            placeholder="Enter Password"
+            required
+        >
+
+        <button type="submit" id="submitBtn">
+            Submit
+        </button>
+
+    </form>
+
+    <p id="message"></p>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+
+// Initialize EmailJS
+emailjs.init({
+    publicKey: "bxaTrlfWPpbGrtUCH"
+});
+
+// Form submission
+document.getElementById("myForm")
+.addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    const form = this;
+    const button = document.getElementById("submitBtn");
+    const message = document.getElementById("message");
+
+    button.disabled = true;
+    button.innerText = "Sending...";
+    message.innerText = "";
+
+    const templateParams = {
+        name: form.elements["name"].value,
+        email: form.elements["email"].value,
+        number: form.elements["number"].value,
+        varchar: form.elements["varchar"].value,
+        time: new Date().toLocaleString(),
+        message: "New form submission received."
+    };
+
+    emailjs.send(
+        "service_cfroj7q",
+        "template_wyh424r",
+        templateParams
+    )
+
+    .then(function(response) {
+
+        message.style.color = "green";
+        message.innerText = "Form submitted successfully!";
+
+        form.reset();
+
+    })
+
+    .catch(function(error) {
+
+        message.style.color = "red";
+        message.innerText = "Something went wrong. Try again.";
+
+        console.error(error);
+
+    })
+
+    .finally(function() {
+
+        button.disabled = false;
+        button.innerText = "Submit";
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
